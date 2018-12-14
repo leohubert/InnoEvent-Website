@@ -12,6 +12,15 @@ use Illuminate\Validation\Validator;
 class EventsController extends Controller
 {
     /**
+     * EventsController constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -30,7 +39,7 @@ class EventsController extends Controller
      */
     public function create()
     {
-
+        return view('event.create');
     }
 
     /**
@@ -91,12 +100,28 @@ class EventsController extends Controller
     /**
      * Display the specified resource.
      *
+     * @param Request $request
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $event = Event::findOrFail($id);
+
+
+        if ($request->wantsJson()) {
+
+            $fileGet = Storage::get($event->file);
+            $json = json_decode($fileGet);
+
+            $response = array();
+
+            $response['room'] = $json->room;
+            $response['event'] = $event;
+            return response()->json($response);
+
+        }
+        return view('event.show', ['event' => $event]);
     }
 
     /**

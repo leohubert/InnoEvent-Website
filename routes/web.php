@@ -21,3 +21,13 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::resource('events', 'EventsController');
+
+Route::post(
+    'braintree/webhook',
+    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+);
+
+Route::post(
+    'braintree/webhook',
+    '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'
+);
