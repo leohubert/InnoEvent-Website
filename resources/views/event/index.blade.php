@@ -22,7 +22,8 @@
                             @csrf
                             <div class="row">
                                 <div class="col-md-6">
-                                    <input type="file" name="event" placeholder="InnoEvent Project Fine JSon" class="form-control">
+                                    <input type="file" name="event" placeholder="InnoEvent Project Fine JSon"
+                                           class="form-control">
                                 </div>
 
                                 <div class="col-md-6">
@@ -30,6 +31,18 @@
                                 </div>
                             </div>
                         </form>
+
+                        @foreach($events as $event)
+                                Event :{{ $event->name }}<br>
+
+                            @foreach($event->offers as $offer)
+                                Offer : {{ $offer->name }}<br>
+                            @endforeach
+
+                                @foreach($event->places as $place)
+                                    Place : {{ $place->place_id }}<br>
+                                @endforeach
+                        @endforeach
                     </div>
                 </div>
             </div>

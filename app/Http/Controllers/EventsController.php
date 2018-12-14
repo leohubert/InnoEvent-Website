@@ -18,7 +18,8 @@ class EventsController extends Controller
      */
     public function index()
     {
-        return view('event.index');
+        $events = Event::all();
+        return view('event.index', ['events' => $events]);
     }
 
     /**
@@ -77,14 +78,11 @@ class EventsController extends Controller
                     'event_id' => $event->id
                 ]);
 
-
                 foreach ($place->_offers as $placeOffer) {
-                    $offer = $event->offers->where('name' , $placeOffer->_name)->first();
+                    $offer = $event->offers->where('name', $placeOffer->_name)->first();
                     $createdPlace->offers()->syncWithoutDetaching($offer->id);
                 }
             }
-
-
         }
 
         return back();

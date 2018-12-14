@@ -27,8 +27,10 @@ class CreatePlacesTable extends Migration
         });
 
         Schema::create('place_offers', function (Blueprint $table) {
-            $table->string('place_id');
-            $table->string('offer_id');
+            $table->uuid('place_id');
+            $table->uuid('offer_id');
+            $table->foreign('place_id')->references('id')->on('places');
+            $table->foreign('offer_id')->references('id')->on('offers');
             $table->timestamps();
         });
 
@@ -42,6 +44,7 @@ class CreatePlacesTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('place_offers');
         Schema::dropIfExists('places');
     }
 }

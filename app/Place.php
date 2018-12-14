@@ -31,6 +31,7 @@ class Place extends Model
 {
 
     use Uuids;
+
     /**
      * Indicates if the IDs are auto-incrementing.
      *
