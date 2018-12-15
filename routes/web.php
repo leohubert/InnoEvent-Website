@@ -22,6 +22,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('events', 'EventsController');
 
+Route::get('/payment/process/{id}', 'PaymentsController@process')->name('payment.process');
+Route::get('/payment', function () {
+    return view('payment.index');
+})->name('payment.index');
+
 Route::post(
     'braintree/webhook',
     '\Laravel\Cashier\Http\Controllers\WebhookController@handleWebhook'

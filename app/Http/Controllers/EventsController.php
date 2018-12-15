@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Event;
 use App\Offer;
 use App\Place;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Validator;

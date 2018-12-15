@@ -19,6 +19,7 @@ class CreatePlacesTable extends Migration
             $table->uuid('id');
             $table->primary('id');
             $table->string('place_id');
+            $table->string('buyer_id')->nullable();
             $table->string('color');
             $table->double('price');
             $table->uuid('event_id');

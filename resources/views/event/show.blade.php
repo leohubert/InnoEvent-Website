@@ -30,7 +30,8 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <button class="btn btn-primary">Buy Ticket</button>
+                        <div id="dropin-container"></div>
+                        <button id="submit-button" class="btn-success btn">Buy Ticket</button>
                     </div>
                 </div>
             </div>
@@ -40,8 +41,40 @@
 
 
 @section('script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://js.braintreegateway.com/web/dropin/1.8.1/js/dropin.min.js"></script>
     <script type="module">
+
+
         (function () {
+            const button = document.querySelector('#submit-button');
+            let selectedPlace = null;
+
+
+            button.addEventListener('click', showPayment);
+
+            function showPayment() {
+                if (!selectedPlace) {
+                    return;
+                }
+                braintree.dropin.create({
+                    authorization: "{{ Braintree_ClientToken::generate() }}",
+                    container: '#dropin-container'
+                }, function (createErr, instance) {
+                    button.addEventListener('click', function () {
+                        instance.requestPaymentMethod(function (err, payload) {
+                            $.get('/payment/process/' + selectedPlace.id, {payload}, function (response) {
+                                if (response.success) {
+                                    alert('Payment successfull!');
+                                } else {
+                                    alert('Payment failed');
+                                }
+                            }, 'json');
+                        });
+                    });
+                });
+            }
+
 
             const svg = document.querySelector('#svg');
             const svgParent = document.querySelector('.svg-parent');
@@ -113,9 +146,10 @@
                 );
                 circle.setAttributeNS(null, "fill-opacity", 0.9);
 
-                if (place.price != -1) {
+                if (place.price != -1 && !place.buyer_id) {
                     circle.setAttribute("fill", "#3b7df2");
                     circle.addEventListener('click', () => {
+                        selectedPlace = place;
 
                         const sectionIdEl = document.querySelector('#sectionId');
                         const rowIdEl = document.querySelector('#rowId');
@@ -129,6 +163,9 @@
 
                     });
                     circle.style.cursor = 'pointer';
+                } else if (place.buyer_id) {
+                    circle.setAttributeNS(null, 'fill', "#f236af");
+                    circle.style.cursor = 'no-drop';
                 } else {
                     circle.setAttributeNS(null, 'fill', "#f23b3b");
                     circle.style.cursor = 'no-drop';
