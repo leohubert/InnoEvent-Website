@@ -118,6 +118,7 @@ class EventsController extends Controller
 
             $response['room'] = $json->room;
             $response['event'] = $event;
+            $response['places'] = $event->places;
             return response()->json($response);
 
         }

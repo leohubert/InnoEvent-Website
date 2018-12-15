@@ -1,95 +1,147 @@
 @extends('layouts.app')
 
 @section('content')
+
     <div class="container">
+        <div class="lds-ripple">
+            <div></div>
+            <div></div>
+        </div>
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="col-md-8 svg-wrapper">
+                <div class="svg-parent">
+                    <svg id="svg" class="svg">
+                    </svg>
+                </div>
+            </div>
+            <div class="col-md-4">
                 <div class="card">
-                    <div class="card-header">Event List</div>
                     <div class="card-body">
-                        Event :{{ $event->name }}
+                        <h5 class="card-title">Buy ticket</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Event : {{ $event->name }}</h6>
+                        <p class="card-text">
+                            Section: <span id="sectionId">-</span><br>
+                            Row: <span id="rowId">-</span><br>
+                            Seat: <span id="seatId">-</span>
+                        </p>
+
+                        <p class="card-text">
+                            Price: <span id="price">-</span>
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn btn-primary">Buy Ticket</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <canvas id="event-canvas"></canvas>
+@endsection
 
 
-
-    <style>
-        #event-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-        }
-
-        html, body {
-            overflow: hidden;
-        }
-    </style>
-
-
+@section('script')
     <script type="module">
         (function () {
 
+            const svg = document.querySelector('#svg');
+            const svgParent = document.querySelector('.svg-parent');
 
-            const canvas = document.querySelector('#event-canvas');
-            canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-            canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-            const ctx = canvas.getContext("2d");
-            ctx.scale(5, 5);
+            let places = null;
+            let zoom = 100;
 
+            document.addEventListener('keypress', (event) => {
+                const nomTouche = event.key;
+                if (svgParent && nomTouche === 'z') {
+                    zoom += 40;
+                    svgParent.style.width = zoom + "%";
+                    svgParent.style.height = zoom + "%";
+                }
+                if (svgParent && nomTouche === 'a') {
+                    if (zoom > 100)
+                        zoom -= 40;
+                    svgParent.style.width = zoom + "%";
+                    svgParent.style.height = zoom + "%";
+                }
+            });
 
             function drawRectangle(positions, angle, color) {
-                ctx.fillStyle = color;
-                ctx.beginPath();
-                ctx.save();
-                ctx.translate(positions[0], positions[1]);
-                ctx.rotate(angle);
-                ctx.translate(-positions[0], -positions[1]);
+                const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+                svg.appendChild(polygon);
+
+                polygon.setAttributeNS(null, "stroke", color);
+                polygon.setAttributeNS(null, "stroke-width", "0.1");
+                polygon.setAttributeNS(null, "fill", color);
+                polygon.setAttributeNS(null, "fill-opacity", 0.4);
+
                 positions.forEach((position, index) => {
                     if (!(index % 2)) {
-                        ctx.lineTo(position, positions[index + 1]);
+                        const point = svg.createSVGPoint();
+                        point.x = position;
+                        point.y = positions[index + 1];
+                        polygon.points.appendItem(point);
                     }
                 });
-                ctx.restore();
-                ctx.closePath();
-                ctx.fill();
+                polygon.setAttributeNS(null, "transform", "rotate(" + angle + ", " + positions[0] + ", " + positions[1] +
+                    " )"
+                );
+
             }
 
             function drawLine(sectionPosition, fromPositions, toPosition, angle, color) {
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('id', 'line2');
+                line.setAttribute('x1', fromPositions[0]);
+                line.setAttribute('y1', fromPositions[1]);
+                line.setAttribute('x2', toPosition[0]);
+                line.setAttribute('y2', toPosition[1]);
+                line.setAttribute("stroke", color);
+                line.setAttributeNS(null, "stroke-width", "0.3");
+                line.setAttributeNS(null, "transform", "rotate(" + angle + ", " + sectionPosition[0] + ", " + sectionPosition[1] +
+                    " )"
+                );
+                svg.appendChild(line);
 
-                ctx.beginPath();
-                ctx.save();
-                ctx.translate(sectionPosition[0], sectionPosition[1]);
-                ctx.rotate(angle);
-                ctx.translate(-sectionPosition[0], -sectionPosition[1]);
-                ctx.lineTo(fromPositions[0], fromPositions[1]);
-                ctx.lineTo(toPosition[0], toPosition[1]);
-                ctx.restore();
-                ctx.closePath();
-                ctx.lineWidth = 0.3;
-                ctx.strokeStyle = color;
-                ctx.stroke();
             }
 
-            function drawCircle(sectionPosition, position, angle, color) {
-                ctx.beginPath();
-                ctx.save();
-                ctx.translate(sectionPosition[0], sectionPosition[1]);
-                ctx.rotate(angle);
-                ctx.translate(-sectionPosition[0], -sectionPosition[1]);
-                ctx.arc(position[0], position[1], 0.26, 0, 2 * Math.PI, false);
-                ctx.fillStyle = color;
-                ctx.fill();
-                ctx.lineWidth = 0.7;
-                ctx.strokeStyle = color;
-                ctx.stroke();
-                ctx.restore();
-                ctx.closePath();
+            function drawCircle(sectionPosition, position, angle, sectionId, rowId, seatId, place) {
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttributeNS(null, 'cx', position[0]);
+                circle.setAttributeNS(null, 'cy', position[1]);
+                circle.setAttributeNS(null, 'r', 0.8);
+                circle.setAttributeNS(null, "transform", "rotate(" + angle + ", " + sectionPosition[0] + ", " + sectionPosition[1] +
+                    " )"
+                );
+                circle.setAttributeNS(null, "fill-opacity", 0.9);
 
+                if (place.price != -1) {
+                    circle.setAttribute("fill", "#3b7df2");
+                    circle.addEventListener('click', () => {
+
+                        const sectionIdEl = document.querySelector('#sectionId');
+                        const rowIdEl = document.querySelector('#rowId');
+                        const seatIdEl = document.querySelector('#seatId');
+                        const priceEl = document.querySelector('#price');
+
+                        sectionIdEl.innerHTML = sectionId;
+                        rowIdEl.innerHTML = rowId;
+                        seatIdEl.innerHTML = seatId;
+                        priceEl.innerHTML = place.price + ' $';
+
+                    });
+                    circle.style.cursor = 'pointer';
+                } else {
+                    circle.setAttributeNS(null, 'fill', "#f23b3b");
+                    circle.style.cursor = 'no-drop';
+
+                }
+                svg.appendChild(circle);
+            }
+
+            function getPlacePrice(sectionId, rowId, seatId) {
+                const place = places.filter(place => {
+                    return place.place_id === `${sectionId}|${rowId}|${seatId}`
+                });
+                return place[0];
 
             }
 
@@ -102,20 +154,23 @@
                 return res.json()
             }).then((res) => {
                 const room = res.room;
+                svg.setAttribute("viewBox", `0 0 ${room._width} ${room._height}`);
+                places = res.places;
                 const scene = room._scene;
                 const sittingsSection = room._sittingSections;
                 drawRectangle(scene._positions, scene._rotation, "#f00");
 
                 Object.keys(sittingsSection).map(function (objectKey, index) {
                     let section = sittingsSection[objectKey];
-                    console.log(section);
                     const rotation = section._rotation + section._userRotation;
-                    drawRectangle(section._positions, rotation, "#1aff00")
+                    drawRectangle(section._positions, rotation, "#0d3ba0");
                     section._rows.forEach((row) => {
-                        console.log(row);
-                        drawLine(section._positions, row._posStart, row._posEnd, rotation, '#121bff');
+                        drawLine(section._positions, row._posStart, row._posEnd, rotation, '#329fff');
                         row._seats.forEach((seat) => {
-                            drawCircle(section._positions, seat._pos, rotation, "#ffc901")
+                            setTimeout(() => {
+                                const placePrice = getPlacePrice(section._idSection, row._idRow, seat._idSeat);
+                                drawCircle(section._positions, seat._pos, rotation, section._idSection, row._idRow, seat._idSeat, placePrice);
+                            }, 1);
                         });
                     });
                 });
