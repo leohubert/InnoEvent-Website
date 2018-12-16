@@ -120,6 +120,8 @@ class EventsController extends Controller
             $response['room'] = $json->room;
             $response['event'] = $event;
             $response['places'] = $event->places;
+            $response['lowest_places'] = $event->places()->where('buyer_id',  null)->where('price', '>', 0)->orderBy('price', 'asc')->limit(50)->get();
+            $response['best_places'] = $event->places;
             return response()->json($response);
 
         }

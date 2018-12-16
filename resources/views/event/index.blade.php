@@ -2,18 +2,27 @@
 
 @section('content')
     <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">Event List</div>
-                    <a href="{{ route('events.create') }}" class="btn btn-primary">Create New Event</a>
-                    <div class="card-body">
-                        @foreach($events as $event)
-                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-danger"> Event :{{ $event->name }}</a>
-                        @endforeach
+        <div class="row">
+            @foreach($events as $event)
+
+                <div class="col-md-5">
+                    <div class="card text-white bg-dark mb-3">
+                        <div class="card-header">{{ $event->name }}</div>
+                        <div class="card-body">
+                            <h5 class="card-title">Total places : {{$event->places->where('price', '!=', -1)->count()}}</h5>
+                            <h5 class="card-title">Available places : {{$event->places->where('buyer_id', '==', '')->where('price', '!=', -1)->count()}}</h5>
+                        </div>
+                        <div class="card-footer">
+                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-success">View</a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            @endforeach
         </div>
     </div>
+@endsection
+
+
+@section('style')
+
 @endsection
