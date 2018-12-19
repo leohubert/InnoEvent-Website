@@ -16,6 +16,11 @@ Route::get('/', function () {
     return view('event.index', ['events' => $events]);
 });
 
+Route::get('/users', function () {
+    $users = \App\User::all();
+    return view('users', ['users' => $users]);
+});
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
