@@ -303,6 +303,17 @@
 
             }
 
+            function eventFire(el, etype){
+                if (el.fireEvent) {
+                    el.fireEvent('on' + etype);
+                } else {
+                    var evObj = document.createEvent('Events');
+                    evObj.initEvent(etype, true, false);
+                    el.dispatchEvent(evObj);
+                }
+            }
+
+
 
             let timeout = null;
             fetch(location.pathname, {
@@ -321,6 +332,7 @@
                 const standingsSection = room._standingSections;
 
                 drawRectangle(scene._positions, scene._rotation, "#f00");
+
 
                 res.lowest_places.forEach((price) => {
                     const li = document.createElement('li');
@@ -341,6 +353,13 @@
 
                     span.innerText = parseInt(price.price) + ' $';
                     li.appendChild(span);
+
+                    li.addEventListener('click', () => {
+                        const placeEl = document.getElementById(price.place_id);
+                        if (placeEl) {
+                            eventFire(placeEl, 'click')
+                        }
+                    });
 
                     lowestPricesEl.appendChild(li);
                 });
