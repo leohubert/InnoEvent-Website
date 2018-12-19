@@ -10487,16 +10487,14 @@ a.text-dark:focus {
   margin: 0 !important;
 }
 
-.nav-tabs .nav-link.active,
-.nav-tabs .nav-item.show .nav-link {
-  color: white;
-  background-color: transparent;
-  border-color: transparent transparent #0f67c7 !important;
-  border-bottom-width: 3px !important;
+.event-view {
+  position: absolute;
+  left: 0;
+  right: 0;
 }
 
 .card-places {
-  height: calc(100vh - 4.5rem);
+  height: calc(100vh - 9.5rem);
 }
 
 .nav-tabs {
@@ -10515,7 +10513,7 @@ a.text-dark:focus {
 .svg-wrapper {
   position: relative;
   width: 100vw;
-  height: calc(100vh - 4.5rem);
+  height: calc(100vh - 9.5rem);
   overflow: auto;
   background: #23272A;
 }

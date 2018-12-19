@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row justify-content-center">
+    <div class="row justify-content-center event-view">
         <div class="col-md-9 svg-wrapper">
             <div class="svg-parent">
                 <svg id="svg" class="svg">
@@ -21,8 +21,8 @@
                          role="tablist">
                         <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-lowest"
                            role="tab" aria-controls="nav-home" aria-selected="true">Lowest Price</a>
-                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-best"
-                           role="tab" aria-controls="nav-profile" aria-selected="false">Best Seats</a>
+                        <!--<a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-best"
+                           role="tab" aria-controls="nav-profile" aria-selected="false">Best Seats</a>-->
                     </div>
                 </nav>
                 <div class="tab-content" id="nav-tabContent" style="overflow: auto">
@@ -32,33 +32,33 @@
 
                         </ul>
                     </div>
-                    <div class="tab-pane fade" id="nav-best" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <!--<div class="tab-pane fade" id="nav-best" role="tabpanel" aria-labelledby="nav-profile-tab">
                         <ul class="list-group list-group-flush" id="best-seats">
                             <li class="list-group-item  bg-dark text-light list-group-item-action">Cras justo odio</li>
                             <li class="list-group-item bg-dark text-light  list-group-item-action">Vestibulum at eros
                             </li>
                         </ul>
-                    </div>
+                    </div>-->
                 </div>
             </div>
             <div class="card d-flex flex-column justify-content-between bg-dark text-light card-places"
                  id="places-buyer" style="display: none !important;">
-                <div class="card-header">
-                    <h5 class="card-title text-center">Your Tickets</h5>
-                </div>
+                <br>
+                <h5 class="card-title text-center">Your Tickets</h5>
+
                 <div class="card-body" id="card-places-list" style="overflow: auto;">
 
                 </div>
                 <div class="card-footer">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-12 text-light">
                             <div id="dropin-container"></div>
                         </div>
                         <div class="col-md-6">
                             <button id="submit-button" class="btn-success btn">Buy Ticket(s)</button>
                         </div>
                         <div class="col-md-6">
-                            <span> Total<h5 class="card-title text-right" id="total">- $</h5></span>
+                            <p id="total"> Total: - $</p>
                         </div>
                     </div>
 
@@ -132,13 +132,15 @@
                                     selectedPlaces.forEach((p, index) => {
                                         const placeEl = document.getElementById(p.place_id);
                                         if (placeEl) {
-                                            placeEl.setAttributeNS(null, 'fill', '#0F0');
+                                            placeEl.removeEventListener('click', null);
+                                            placeEl.setAttribute('fill', '#bababa');
+                                            placeEl.style.cursor = 'no-drop';
                                         }
-                                        selectedPlaces.splice(index, 1);
                                     });
-                                    console.log('ok');
+                                    selectedPlaces = [];
+                                    console.log('Payment Success ! ')
                                 } else {
-                                    console.log('Payment error');
+                                    console.log('Payment error ! ');
                                 }
                             }, 'json');
                         });
@@ -274,7 +276,7 @@
                                 cardPlacesList.appendChild(div);
                                 total += parseInt(p.price);
                             });
-                            totalEl.innerText = total + '$';
+                            totalEl.innerText = `Total: ${total} $`;
                         } else {
                             placesBuyer.setAttribute('style', 'display: none !important');
                             placesList.style.display = 'flex';
@@ -316,6 +318,8 @@
                 places = res.places;
                 const scene = room._scene;
                 const sittingsSection = room._sittingSections;
+                const standingsSection = room._standingSections;
+
                 drawRectangle(scene._positions, scene._rotation, "#f00");
 
                 res.lowest_places.forEach((price) => {
@@ -361,6 +365,12 @@
                             }, 1000);
                         });
                     });
+                });
+
+                Object.keys(standingsSection).map(function (objectKey) {
+                    let section = standingsSection[objectKey];
+                    const rotation = section._rotation + section._userRotation;
+                    drawRectangle(section._positions, rotation, "#0d3ba0");
                 });
             });
         })();

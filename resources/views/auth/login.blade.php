@@ -1,73 +1,69 @@
-@extends('layouts.app')
+@extends('layouts.auth')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+    <div class="container">
+        <div class="row h-100">
+            <div class="col-12 col-md-10 mx-auto my-auto">
+                <div class="card auth-card">
+                    <div class="position-relative image-side ">
 
-                <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
-                        @csrf
+                        <p class=" text-white h2">{{ config('app.name') }}</p>
 
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+                        <p class="white mb-0">
+                            Please use your credentials to login.
+                            <br>If you are not a member, please
+                            <a href="#" class="white">register</a>.
+                        </p>
+                    </div>
+                    <div class="form-side">
+                        <a href="/">
+                            <span class="logo-single"></span>
+                        </a>
+                        <h6 class="mb-4">{{ __('Login') }}</h6>
+                        <form method="POST" action="{{ route('login') }}" id="form">
+                            @csrf
 
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" name="email" value="{{ old('email') }}" required autofocus>
-
+                            <label class="form-group has-float-label mb-4">
+                                <input class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                                       value="{{ old('email') }}" name="email" id="email" required autofocus/>
                                 @if ($errors->has('email'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('email') }}</strong>
                                     </span>
                                 @endif
-                            </div>
-                        </div>
+                                <span>{{ __('E-Mail') }}</span>
+                            </label>
 
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password" required>
-
+                            <label class="form-group has-float-label mb-4">
+                                <input class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}"
+                                       type="password" name="password" id="password" placeholder="" required/>
                                 @if ($errors->has('password'))
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $errors->first('password') }}</strong>
                                     </span>
                                 @endif
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-md-6 offset-md-4">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-
-                                    <label class="form-check-label" for="remember">
-                                        {{ __('Remember Me') }}
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Login') }}
-                                </button>
-
+                                <span>{{ __('Password') }}</span>
+                            </label>
+                            <div class="d-flex justify-content-between align-items-center">
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
-                                        {{ __('Forgot Your Password?') }}
-                                    </a>
+                                    <a href="{{ route('password.request') }}">{{ __('Forgot Your Password?') }}</a>
                                 @endif
+                                <div class="btn-group mr-2  mb-1" role="group">
+                                    <a href="{{ route('register') }}"
+                                       class="btn btn-primary btn-multiple-state" id="registerButton">
+                                        <span class="label">{{ __('REGISTER') }}</span>
+                                    </a>
+                                    <a href="javascript:;" onclick="document.getElementById('form').submit();"
+                                       class="btn btn-primary btn-multiple-state" id="successButton">
+                                        <span class="label">{{ __('LOGIN') }}</span>
+                                    </a>
+                                </div>
+                                <button type="submit" style="display: none"></button>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 @endsection
