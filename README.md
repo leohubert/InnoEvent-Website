@@ -4,8 +4,8 @@
      <img src="public/logo.png" width="100">
 </p>
 
-[![Build Status](https://img.shields.io/travis/mrdarkskil/innoevent-website/master.svg)](https://travis-ci.org/gothinkster/laravel-realworld-example-app) 
-[![GitHub stars](https://img.shields.io/github/stars/mrdarkskil/innoevent-website.svg)](https://github.com/mrdarkskil/innoevent-website/stargazers) [![GitHub license](https://img.shields.io/github/license/mrdarkskil/innoevent-website.svg)](https://raw.githubusercontent.com/gothinkster/laravel-realworld-example-app/master/LICENSE)
+[![Build Status](https://img.shields.io/travis/MrDarkSkil/A18-GLO-Equipe8-WebSite/master.svg)](https://travis-ci.com/MrDarkSkil/A18-GLO-Equipe8-WebSite) 
+[![GitHub stars](https://img.shields.io/github/stars/mrdarkskil/innoevent-website.svg)](https://github.com/mrdarkskil/innoevent-website/stargazers) [![GitHub license](https://img.shields.io/github/license/mrdarkskil/innoevent-website.svg)](https://raw.githubusercontent.com/mrdarkskil/innoevent-website/master/LICENSE)
 
 
 ## Software
