@@ -4,7 +4,7 @@
      <img src="public/logo.png" width="100">
 </p>
 
-[![Build Status](https://travis-ci.com/MrDarkSkil/A18-GLO-Equipe8-WebSite.svg?branch=master)](https://travis-ci.com/MrDarkSkil/A18-GLO-Equipe8-WebSite)
+[![Build Status](https://travis-ci.com/MrDarkSkil/InnoEvent-Website.svg?branch=master)](https://travis-ci.com/MrDarkSkil/InnoEvent-Website)
 [![GitHub stars](https://img.shields.io/github/stars/mrdarkskil/innoevent-website.svg)](https://github.com/mrdarkskil/innoevent-website/stargazers) [![GitHub license](https://img.shields.io/github/license/mrdarkskil/innoevent-website.svg)](https://raw.githubusercontent.com/mrdarkskil/innoevent-website/master/LICENSE)
 
 
