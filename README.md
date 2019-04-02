@@ -14,7 +14,7 @@
 
 This project was done under the "Génie logiciel orienté objet" class at the Laval University - Quebec 
 
-Demo here: https://innoevent.ga or https://innoevent.emodyz.eu
+Demo here: https://innoevent.emodyz.eu
 You can login with **root@root.com** and password **root**
 
 You can also buy ticket with this credit card: **5555 5555 5555 4444** expiration date **02/22** ( don't wories it's test card, real card was disabled )
